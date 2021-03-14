@@ -1,16 +1,16 @@
 package com.controller;
 
-
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.pojo.Investor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.*;
 
 @RestController
@@ -35,15 +35,11 @@ public class    testController {
 
     @GetMapping(value = "/contectMongo")
     public String getMongoData(HttpServletRequest request){
-        ConnectionString connString = new ConnectionString(
-                "mongodb+srv://<username>:<password>@<cluster-address>/test?w=majority"
-        );
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(connString)
-                .retryWrites(true)
-                .build();
-        MongoClient mongoClient = MongoClients.create(settings);
-        MongoDatabase database = mongoClient.getDatabase("test");
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        MongoDatabase database = mongoClient.getDatabase("mydb");
+        MongoCollection<Investor> collection = database.getCollection("investor", Investor.class);
+
+
 
         return "helloworld";
     }
